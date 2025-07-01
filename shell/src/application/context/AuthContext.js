@@ -13,4 +13,12 @@ export const useAuthStore = create((set) => ({
     }
     set({ user });
   },
+  clearUser: () => {
+    localStorage.removeItem('user');
+    set({ user: null });  
+  },
+  isAuthenticated: () => {
+    const user = useAuthStore.getState().user;
+    return user && user.token ? true : false;
+  },
 }));

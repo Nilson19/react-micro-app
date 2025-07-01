@@ -1,8 +1,12 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
+const Dotenv = require('dotenv-webpack');
+require('dotenv').config();
 
 const deps = require('./package.json').dependencies;
+
+console.log('SHELL_REMOTE:', process.env.SHELL_REMOTE);
 
 module.exports = {
   entry: './src/index.jsx',
@@ -46,9 +50,9 @@ module.exports = {
       name: 'shell',
       filename: 'remoteEntry.js',
       remotes: {
-        shell: 'shell@http://localhost:3100/remoteEntry.js',
-        auth: 'auth@http://localhost:3101/remoteEntry.js',
-        dashboard: 'dashboard@http://localhost:3102/remoteEntry.js',
+        shell: `shell@${process.env.SHELL_REMOTE}`,
+        auth: `auth@${process.env.AUTH_REMOTE}`,
+        dashboard: `dashboard@${process.env.DASH_REMOTE}`,
       },
       exposes: {
         './store': './src/application/context/AuthContext.js',
@@ -69,7 +73,7 @@ module.exports = {
           eager: true,
           requiredVersion: '^7.6.3',
         },
-        'zustand': {
+        zustand: {
           singleton: true,
           eager: true,
           requiredVersion: deps['zustand'],
@@ -79,5 +83,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './public/index.html',
     }),
+    new Dotenv(),
   ],
 };
