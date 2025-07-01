@@ -1,12 +1,17 @@
 import React, { Suspense, useContext, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./application/context/AuthContext";
 
 const AuthApp = React.lazy(() => import("auth/AuthApp"));
 const DashboardApp = React.lazy(() => import("dashboard/DashboardApp"));
 
 export default function AppRoutes() {
+  const {user} = useAuthStore();
 
-  const user = false;
+  console.log("AppRoutes initialized with user:", user);
+
+  const token = user?.token;
+
 
   return (
       <BrowserRouter>
@@ -15,14 +20,14 @@ export default function AppRoutes() {
             <Route
               path="/"
               element={
-                user ? <Navigate to="/dashboard" /> : <Navigate to="/auth/login" />
+                token ? <Navigate to="/dashboard" /> : <Navigate to="/auth" />
               }
             />
             <Route path="/auth/*" element={<AuthApp />} />
             <Route
               path="/dashboard/*"
               element={
-                user ? <DashboardApp user={user} /> : <Navigate to="/" />
+                token ? <DashboardApp user={user} /> : <Navigate to="/" />
               }
             />
             <Route path="*" element={<div>Página no encontrada</div>} />
