@@ -5,13 +5,22 @@ import { register as doRegister } from "../controllers/AuthController";
 
 export function useRegisterViewModel() {
   const [form, setForm] = useState({
-    firstName: "",
-    lastName: "",
+    name: "",
+    last_name: "",
     phone: "",
     email: "",
     password: "",
     confirmPassword: "",
-    addresses: [""],
+    addresses: [
+      {
+        street: "",
+        city: "",
+        state: "",
+        zip_code: "",
+        country: "",
+        is_default: true,
+      },
+    ],
   });
 
   const [error, setError] = useState(null);
@@ -23,14 +32,30 @@ export function useRegisterViewModel() {
     setForm((f) => ({ ...f, [name]: value }));
   };
 
-  const handleAddressChange = (idx, e) => {
+  const handleAddressChange = (idx, field, value) => {
     const newAddrs = [...form.addresses];
-    newAddrs[idx] = e.target.value;
+    newAddrs[idx] = {
+      ...newAddrs[idx],
+      [field]: value,
+    };
     setForm((f) => ({ ...f, addresses: newAddrs }));
   };
 
   const addAddress = () => {
-    setForm((f) => ({ ...f, addresses: [...f.addresses, ""] }));
+    setForm((f) => ({
+      ...f,
+      addresses: [
+        ...f.addresses,
+        {
+          street: "",
+          city: "",
+          state: "",
+          zip_code: "",
+          country: "",
+          is_default: false,
+        },
+      ],
+    }));
   };
 
   const removeAddress = (idx) => {
@@ -40,17 +65,31 @@ export function useRegisterViewModel() {
     }));
   };
 
+  const setDefaultAddress = (idx) => {
+    setForm((f) => ({
+      ...f,
+      addresses: f.addresses.map((addr, i) => ({
+        ...addr,
+        is_default: i === idx,
+      })),
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+
     if (form.password !== form.confirmPassword) {
       setError("Las contraseñas no coinciden");
       return;
     }
+
     try {
-      const user = await doRegister(form);
+      // Crea una copia sin confirmPassword
+      const { confirmPassword, ...dataToSend } = form;
+      const user = await doRegister(dataToSend);
       setUser(user);
-      navigate("/dashboard");
+      navigate("/auth");
     } catch {
       setError("No se pudo registrar");
     }
@@ -63,6 +102,7 @@ export function useRegisterViewModel() {
     handleAddressChange,
     addAddress,
     removeAddress,
+    setDefaultAddress,
     handleSubmit,
     navigate,
   };

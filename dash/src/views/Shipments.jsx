@@ -1,4 +1,3 @@
-// src/views/ShipmentsListView.jsx
 import React from "react";
 import {
   Container,
