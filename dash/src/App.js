@@ -1,11 +1,9 @@
 import React from 'react';
+import QuoteView from './views/QuoteView';
 
 export default function App({ user }) {
+    console.log('App initialized with user in dash:', user);
     return (
-        <div>
-            <h1>Dashboard</h1>
-            <p>Welcome, {user.name}!</p>
-            <p>This is the dashboard micro frontend.</p>
-        </div>
+            <QuoteView />
     );
 }
