@@ -18,27 +18,48 @@ Este proyecto implementa una arquitectura de **microfrontends** en **React** uti
 - **Pruebas:** Jest / React Testing Library
 
 ## 📂 Estructura del proyecto
+
+```
 /
-├── shell/ # Contenedor principal
-├── auth/ # Microfrontend de autenticación
-├── dash/ # Microfrontend principal
-├── package.json # Scripts comunes
+├── shell/        # Contenedor principal
+├── auth/         # Microfrontend de autenticación
+├── dash/         # Microfrontend principal
+├── package.json  # Scripts comunes
 └── README.md
+```
 
-⚙️ Instalación
+## ⚙️ Instalación
 
-Cada microfrontend funciona de manera independiente, por lo que es necesario instalar sus dependencias de forma individual.
+Cada microfrontend funciona de manera independiente, por lo que es necesario instalar sus dependencias de forma individual:
 
 1. **Instalar dependencias en cada módulo:**
--cd shell
---npm install
--cd ..
--cd auth
---npm install
--cd ..
--cd dash
---npm install
 
-2. **Ejecucion**
-en / ejecutar npm run start:all
+   ```bash
+   cd shell
+   npm install
+   ```
+
+   ```bash
+   cd ../auth
+   npm install
+   ```
+
+   ```bash
+   cd ../dash
+   npm install
+   ```
+
+2. **Volver a la raíz del proyecto:**
+
+   ```bash
+   cd ..
+   ```
+
+3. **Ejecución**
+
+   Desde la raíz, puedes iniciar todos los microfrontends en paralelo con:
+
+   ```bash
+   npm run start:all
+   ```
 
