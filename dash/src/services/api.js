@@ -1,15 +1,15 @@
 import axios from "axios";
-import { useAuthStore } from "shell/store"; // Asegúrate de usar la ruta correcta
+import { useAuthStore } from "shell/store";
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api/v1",
+  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000/api/v1",
   headers: { "Content-Type": "application/json" },
 });
 
 // Interceptor que añade el token dinámico
 api.interceptors.request.use(
   (config) => {
-    const { user } = useAuthStore.getState(); // 💡 Aquí sacas el user en runtime
+    const { user } = useAuthStore.getState();
     if (user?.token) {
       config.headers = config.headers || {};
       config.headers.Authorization = `Bearer ${user.token}`;

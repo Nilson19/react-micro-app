@@ -15,7 +15,6 @@ export function useLoginViewModel() {
     setError(null);
     try {
       const response = await doLogin(email, password);
-      console.log("Usuario logueado:", response.data);
       setUser(response.data);
       navigate("/dashboard");
     } catch {

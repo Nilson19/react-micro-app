@@ -10,8 +10,7 @@ export const useShipmentsViewModel = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await ShipmentController.getAll();
-      // Ajusta según tu backend si los datos vienen en response.data
+      const response = await ShipmentController.getShipments();
       setShipments(response.data);
     } catch (err) {
       setError("Error al cargar los envíos");

@@ -8,7 +8,7 @@ import {
   Alert,
   IconButton,
 } from "@mui/material";
-import { AddCircleOutline, RemoveCircleOutline } from "@mui/icons-material";
+import { AddCircleOutline, RemoveCircleOutline, Star, StarBorder } from "@mui/icons-material";
 import { useRegisterViewModel } from "../viewmodels/useRegisterViewModel";
 
 export default function RegisterView() {
@@ -19,6 +19,7 @@ export default function RegisterView() {
     handleAddressChange,
     addAddress,
     removeAddress,
+    setDefaultAddress,
     handleSubmit,
     navigate,
   } = useRegisterViewModel();
@@ -34,18 +35,18 @@ export default function RegisterView() {
         <form onSubmit={handleSubmit}>
           <TextField
             label="Nombre"
-            name="firstName"
+            name="name"
             fullWidth
             margin="normal"
-            value={form.firstName}
+            value={form.name}
             onChange={handleChange}
           />
           <TextField
             label="Apellido"
-            name="lastName"
+            name="last_name"
             fullWidth
             margin="normal"
-            value={form.lastName}
+            value={form.last_name}
             onChange={handleChange}
           />
           <TextField
@@ -84,33 +85,89 @@ export default function RegisterView() {
             onChange={handleChange}
           />
 
-          <Box mt={2} mb={1}>
+          <Box mt={3} mb={1}>
             <Typography variant="subtitle1">Direcciones</Typography>
           </Box>
+
           {form.addresses.map((addr, idx) => (
-            <Box key={idx} display="flex" alignItems="center" mb={1}>
-              <TextField
-                label={`Dirección #${idx + 1}`}
-                fullWidth
-                value={addr}
-                onChange={(e) => handleAddressChange(idx, e)}
-              />
-              <IconButton
-                onClick={() => removeAddress(idx)}
-                disabled={form.addresses.length === 1}
-                sx={{ ml: 1 }}
-              >
-                <RemoveCircleOutline />
-              </IconButton>
-              {idx === form.addresses.length - 1 && (
-                <IconButton onClick={addAddress} sx={{ ml: 1 }}>
-                  <AddCircleOutline />
+            <Box
+              key={idx}
+              mb={2}
+              p={2}
+              border="1px solid #ddd"
+              borderRadius={1}
+            >
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={1}>
+                <Typography variant="subtitle2">
+                  Dirección #{idx + 1}
+                </Typography>
+                <IconButton onClick={() => setDefaultAddress(idx)}>
+                  {addr.is_default ? (
+                    <Star color="primary" />
+                  ) : (
+                    <StarBorder />
+                  )}
                 </IconButton>
-              )}
+              </Box>
+
+              <TextField
+                label="Calle"
+                fullWidth
+                margin="dense"
+                value={addr.street}
+                onChange={(e) => handleAddressChange(idx, "street", e.target.value)}
+              />
+              <TextField
+                label="Ciudad"
+                fullWidth
+                margin="dense"
+                value={addr.city}
+                onChange={(e) => handleAddressChange(idx, "city", e.target.value)}
+              />
+              <TextField
+                label="Departamento/Estado"
+                fullWidth
+                margin="dense"
+                value={addr.state}
+                onChange={(e) => handleAddressChange(idx, "state", e.target.value)}
+              />
+              <TextField
+                label="Código Postal"
+                fullWidth
+                margin="dense"
+                value={addr.zip_code}
+                onChange={(e) => handleAddressChange(idx, "zip_code", e.target.value)}
+              />
+              <TextField
+                label="País"
+                fullWidth
+                margin="dense"
+                value={addr.country}
+                onChange={(e) => handleAddressChange(idx, "country", e.target.value)}
+              />
+
+              <Box display="flex" alignItems="center" mt={1}>
+                <IconButton
+                  onClick={() => removeAddress(idx)}
+                  disabled={form.addresses.length === 1}
+                >
+                  <RemoveCircleOutline />
+                </IconButton>
+                {idx === form.addresses.length - 1 && (
+                  <IconButton onClick={addAddress}>
+                    <AddCircleOutline />
+                  </IconButton>
+                )}
+              </Box>
             </Box>
           ))}
 
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 3 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            fullWidth
+            sx={{ mt: 3 }}
+          >
             Registrar
           </Button>
           <Button
