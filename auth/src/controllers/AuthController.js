@@ -3,6 +3,7 @@ import AuthService from '../services/AuthService';
 export const login = async (email, password) => {
     try {
         const user = await AuthService.login(email, password);
+        console.log("Usuario logueado contro:", user);
         return user;
     } catch (err) {
         throw err;

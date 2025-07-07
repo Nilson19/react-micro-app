@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "shell/store";
+import { useAuthContext } from "shell/store";
 import { register as doRegister } from "../controllers/AuthController";
 
 export function useRegisterViewModel() {
@@ -24,7 +24,7 @@ export function useRegisterViewModel() {
   });
 
   const [error, setError] = useState(null);
-  const { setUser } = useAuthStore();
+  const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
   const handleChange = (e) => {

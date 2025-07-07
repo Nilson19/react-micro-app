@@ -1,17 +1,16 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React from 'react';
+import { useState } from "react";
 import { Box, Tabs, Tab, Typography, TextField, Button } from "@mui/material";
 import QuoteView from "./views/QuoteView";
 import ShipmentsListView from "./views/Shipments";
 import ShipmentTrackingView from "./views/ShipmentTrackingView";
-import { useAuthStore } from "shell/store"; // Importing the store from shell
+import { useAuthContext } from "shell/store";
 
-export default function App() {
+const DashboardApp = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [shipmentInput, setShipmentInput] = useState("");
   const [shipmentId, setShipmentId] = useState(null);
-  const { clearUser } = useAuthStore();
-  const navigate = useNavigate();
+  const { setUser } = useAuthContext();
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -23,11 +22,8 @@ export default function App() {
     }
   };
 
-  // Clear user session when the component mounts
   const handleLogout = () => {
-    clearUser();
-    console.log("User session cleared");
-    navigate("/auth"); // Redirect to login page after clearing user
+    setUser(null);
   };
 
   return (
@@ -44,23 +40,14 @@ export default function App() {
           <Tab label="Seguimiento" />
         </Tabs>
 
-        {/* Botón de cerrar sesión */}
-        <Button variant="outlined" color="secondary" onClick={() =>   handleLogout()}>
+        <Button variant="outlined" color="secondary" onClick={handleLogout}>
           Cerrar sesión
         </Button>
       </Box>
 
       <Box sx={{ mt: 3 }}>
-        {tabIndex === 0 && (
-          <Box>
-            <QuoteView />
-          </Box>
-        )}
-        {tabIndex === 1 && (
-          <Box>
-            <ShipmentsListView />
-          </Box>
-        )}
+        {tabIndex === 0 && <QuoteView />}
+        {tabIndex === 1 && <ShipmentsListView />}
         {tabIndex === 2 && (
           <Box>
             <Typography variant="h6" gutterBottom>
@@ -81,13 +68,12 @@ export default function App() {
                 Ver seguimiento
               </Button>
             </Box>
-
-            {shipmentId && (
-              <ShipmentTrackingView shipmentId={shipmentId} />
-            )}
+            {shipmentId && <ShipmentTrackingView shipmentId={shipmentId} />}
           </Box>
         )}
       </Box>
     </Box>
   );
 }
+
+export default DashboardApp;
