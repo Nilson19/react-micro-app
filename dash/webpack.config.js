@@ -51,15 +51,17 @@ module.exports = {
             exposes: {
                 './DashboardApp': './src/App.jsx',
             },
-        shared: {
-            react: { singleton: true, eager: false, requiredVersion: deps.react },
-            'react-dom': { singleton: true, eager: false, requiredVersion: deps['react-dom'] },
-            'react-router-dom': { singleton: true, eager: false, requiredVersion: deps['react-router-dom'] },
-        },
+            shared: {
+                react: { singleton: true, eager: false, requiredVersion: deps.react },
+                'react-dom': { singleton: true, eager: false, requiredVersion: deps['react-dom'] },
+                'react-router-dom': { singleton: true, eager: false, requiredVersion: deps['react-router-dom'] },
+            },
         }),
         new HtmlWebpackPlugin({
             template: './public/index.html',
         }),
-        new Dotenv(),
+        new Dotenv({
+            systemvars: true,
+        }),
     ],
 };
