@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthStore } from "shell/store";
+import { useAuthContext } from "shell/store";
 import { login as doLogin } from "../controllers/AuthController";
 
 export function useLoginViewModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const { setUser } = useAuthStore();
+  const { setUser } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -15,6 +15,7 @@ export function useLoginViewModel() {
     setError(null);
     try {
       const response = await doLogin(email, password);
+      console.log("Usuario logueado:", response.data);
       setUser(response.data);
       navigate("/dashboard");
     } catch {

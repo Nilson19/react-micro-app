@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useAuthStore } from "shell/store";
+import { useAuthContext } from "shell/store";
 import ShipmentController from "../controllers/ShipmentController";
 
 export function useQuoteViewModel() {
-  const { user } = useAuthStore();
+  const { user } = useAuthContext();
   console.log("Usuario en QuoteView:", user);
 
   const [form, setForm] = useState({

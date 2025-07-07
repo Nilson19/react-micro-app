@@ -19,11 +19,9 @@ module.exports = {
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
             'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization',
         },
-        static: { directory: path.join(__dirname, 'public') },
     },
     output: {
         publicPath: 'auto',
-        clean: true,
     },
     resolve: {
         extensions: ['.js', '.jsx'],
@@ -53,29 +51,12 @@ module.exports = {
                 shell: `shell@${process.env.SHELL_REMOTE}`,
             },
             exposes: {
-                './AuthApp': './src/index.js',
+                './AuthApp': './src/App.jsx',
             },
             shared: {
-                react: {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '^19.1.0',
-                },
-                'react-dom': {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '^19.1.0',
-                },
-                'react-router-dom': {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: '^7.6.3',
-                },
-                zustand: {
-                    singleton: true,
-                    eager: true,
-                    requiredVersion: deps['zustand'],
-                },
+                react: { singleton: true, eager: false, requiredVersion: deps.react },
+                'react-dom': { singleton: true, eager: false, requiredVersion: deps['react-dom'] },
+                'react-router-dom': { singleton: true, eager: false, requiredVersion: deps['react-router-dom'] },
             },
         }),
         new HtmlWebpackPlugin({

@@ -1,0 +1,10 @@
+{
+  "name": "root",
+  "version": "1.0.0",
+  "scripts": {
+    "start:auth": "npm run start --prefix auth",
+    "start:shell": "npm run start --prefix shell",
+    "start:dash": "npm run start --prefix dash",
+    "start:all": "npm run start:auth & npm run start:shell & npm run start:dash"
+  }
+}
