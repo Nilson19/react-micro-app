@@ -1,16 +1,19 @@
-import React from 'react';
-import { useState } from "react";
+import React from "react";
+import { useState, useEffect } from "react";
 import { Box, Tabs, Tab, Typography, TextField, Button } from "@mui/material";
 import QuoteView from "./views/QuoteView";
 import ShipmentsListView from "./views/Shipments";
 import ShipmentTrackingView from "./views/ShipmentTrackingView";
 import { useAuthContext } from "shell/store";
+import useAxiosInterceptor from "./services/api";
 
 const DashboardApp = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [shipmentInput, setShipmentInput] = useState("");
   const [shipmentId, setShipmentId] = useState(null);
-  const { setUser } = useAuthContext();
+  const { setUser, user } = useAuthContext();
+  useAxiosInterceptor(user?.token);
+
 
   const handleChange = (event, newValue) => {
     setTabIndex(newValue);
@@ -28,7 +31,12 @@ const DashboardApp = () => {
 
   return (
     <Box sx={{ width: "100%", mt: 4 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={2}
+      >
         <Tabs
           value={tabIndex}
           onChange={handleChange}
@@ -74,6 +82,6 @@ const DashboardApp = () => {
       </Box>
     </Box>
   );
-}
+};
 
 export default DashboardApp;
