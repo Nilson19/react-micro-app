@@ -1,24 +1,28 @@
+import { useEffect } from "react";
 import axios from "axios";
-import { useAuthContext } from "shell/store";
 
-const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:3000/api/v1",
-  headers: { "Content-Type": "application/json" },
-});
+const useAxiosInterceptor = (token) => {
+  useEffect(() => {
+    axios.defaults.baseURL = process.env.REACT_APP_API_URL || "http://localhost:3000/api/v1";
+    axios.defaults.headers.common["Content-Type"] = "application/json";
 
-// Interceptor que añade el token dinámico
-api.interceptors.request.use(
-  (config) => {
-    const { user } = useAuthContext.getState();
-    if (user?.token) {
-      config.headers = config.headers || {};
-      config.headers.Authorization = `Bearer ${user.token}`;
-    } else {
-      delete config.headers?.Authorization;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+    const interceptorId = axios.interceptors.request.use(
+      (config) => {
+        if (token) {
+          config.headers = config.headers || {};
+          config.headers.Authorization = `Bearer ${token}`;
+        } else {
+          delete config.headers?.Authorization;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-export default api;
+    return () => {
+      axios.interceptors.request.eject(interceptorId);
+    };
+  }, []);
+};
+
+export default useAxiosInterceptor;
