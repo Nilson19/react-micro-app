@@ -52,7 +52,6 @@ export default function ShipmentTrackingView({ shipmentId }) {
               <ListItem key={index} disableGutters>
                 <ListItemText
                   primary={`Estado: ${update.status}`}
-                  secondary={`Fecha: ${update.timestamp}`}
                 />
               </ListItem>
             ))}
