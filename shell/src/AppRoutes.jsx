@@ -1,47 +1,47 @@
-import React, { Suspense, use, useContext, useEffect } from "react";
+import React, { Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useAuthContext } from "shell/store";
 import AuthApp from "auth/AuthApp";
 import DashboardApp from "dashboard/DashboardApp";
 
+const Loading = () => <div>Cargando...</div>;
+
 export default function AppRoutes() {
   const { user } = useAuthContext();
 
-  console.log("user:", user);
-
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
+    <Suspense fallback={<Loading />}>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Navigate
+              to={user ? "/dashboard" : "/auth"}
+              replace
+            />
+          }
+        />
+
+        <Route path="/auth/*" element={
           user ? (
-            <Navigate to="/dashboard" />
+            <Navigate to="/dashboard" replace />
           ) : (
-            <Navigate to="/auth" />
-          )
-        }
-      />
-      <Route
-        path="/auth/*"
-        element={
-          <Suspense>
             <AuthApp />
-          </Suspense>
-        }
-      />
-      <Route
-        path="/dashboard/*"
-        element={
-          user ? (
-            <Suspense>
-              <DashboardApp />
-            </Suspense>
-          ) : (
-            <Navigate to="/" />
           )
-        }
-      />
-      <Route path="*" element={<div>Página no encontrada</div>} />
-    </Routes>
+        } />
+
+        <Route
+          path="/dashboard/*"
+          element={
+            user ? (
+              <DashboardApp />
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+        <Route path="*" element={<div>Página no encontrada</div>} />
+      </Routes>
+    </Suspense>
   );
 }
