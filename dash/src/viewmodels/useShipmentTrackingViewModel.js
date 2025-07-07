@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShipmentTrackingController } from "../controllers/shipmentTrackingController";
+import { ShipmentTrackingController } from "../controllers/ShipmentTrackingController";
 
 export function useShipmentTrackingViewModel(shipmentId) {
   const [status, setStatus] = useState(
