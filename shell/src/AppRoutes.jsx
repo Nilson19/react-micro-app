@@ -9,6 +9,8 @@ const Loading = () => <div>Cargando...</div>;
 export default function AppRoutes() {
   const { user } = useAuthContext();
 
+  console.log("AppRoutes user:", user);
+
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
@@ -16,14 +18,14 @@ export default function AppRoutes() {
           path="/"
           element={
             <Navigate
-              to={user ? "/dashboard" : "/auth"}
+              to={user?.token ? "/dashboard" : "/auth"}
               replace
             />
           }
         />
 
         <Route path="/auth/*" element={
-          user ? (
+          user?.token ? (
             <Navigate to="/dashboard" replace />
           ) : (
             <AuthApp />
@@ -33,7 +35,7 @@ export default function AppRoutes() {
         <Route
           path="/dashboard/*"
           element={
-            user ? (
+            user?.token ? (
               <DashboardApp />
             ) : (
               <Navigate to="/auth" replace />
